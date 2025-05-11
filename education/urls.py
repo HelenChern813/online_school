@@ -3,7 +3,7 @@ from rest_framework.routers import SimpleRouter
 
 from education.apps import EducationConfig
 from education.views import (CourseViewSet, LessonCreateAPIView, LessonDestroyAPIView, LessonListAPIView,
-                             LessonRetrieveAPIView, LessonUpdateAPIView)
+                             LessonRetrieveAPIView, LessonUpdateAPIView, PaymentListView)
 
 app_name = EducationConfig.name
 
@@ -11,6 +11,7 @@ router = SimpleRouter()
 router.register("", CourseViewSet)
 
 urlpatterns = [
+    path("users_list/", PaymentListView.as_view(), name="user_list"),
     path("lesson/", LessonListAPIView.as_view(), name="lesson_list"),
     path("lesson/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson_retrieve"),
     path("lesson/create/", LessonCreateAPIView.as_view(), name="lesson_create"),

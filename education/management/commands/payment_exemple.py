@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from users.models import Payment
+from education.models import Payment
 
 
 class Command(BaseCommand):
