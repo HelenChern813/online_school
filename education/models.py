@@ -1,7 +1,11 @@
 from django.db import models
 
+from users.models import User
+
 
 class Course(models.Model):
+    """Модель курса обучения"""
+
     name = models.CharField(
         max_length=150,
         verbose_name="Название курса",
@@ -15,6 +19,9 @@ class Course(models.Model):
         verbose_name="Изображение",
         help_text="Загрузите превью курса",
     )
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец", help_text="Укажите владельца"
+    )
 
     def __str__(self):
         return self.name
@@ -26,6 +33,8 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
+    """Модель урока обучения"""
+
     name = models.CharField(
         max_length=150,
         verbose_name="Название урока",
@@ -41,6 +50,9 @@ class Lesson(models.Model):
     )
     video = models.TextField(verbose_name="Ссылка на видео", help_text="Вставьте ссылку на видео")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Курс")
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец", help_text="Укажите владельца"
+    )
 
     def __str__(self):
         return self.name
@@ -49,3 +61,23 @@ class Lesson(models.Model):
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
         ordering = ["name"]
+
+
+class Payment(models.Model):
+    CASH = "cash"
+    ONLINE_PAYMENT = "online_payment"
+
+    STATUS_PAYMENT = [
+        (CASH, "Наличные"),
+        (ONLINE_PAYMENT, "Перевод на счет"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Пользователь")
+    date_pay = models.DateTimeField(verbose_name="Дата и время оплаты")
+    content_pay = models.ForeignKey(Course, on_delete=models.CASCADE)
+    payment_amount = models.IntegerField(verbose_name="Сумма оплаты")
+    payment_method = models.CharField(
+        max_length=15,
+        choices=STATUS_PAYMENT,
+        default=ONLINE_PAYMENT,
+        verbose_name="Способ оплаты",
+    )
