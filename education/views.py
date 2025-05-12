@@ -7,11 +7,13 @@ from rest_framework.viewsets import ModelViewSet
 from education.models import Course, Lesson, Payment
 from education.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.permissions import IsModer, IsOwner
+from education.paginators import LessonPagination, CoursePagination
 
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = CoursePagination
 
     def perform_create(self, serializer):
         course = serializer.save()
@@ -42,6 +44,7 @@ class LessonCreateAPIView(CreateAPIView):
 class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    pagination_class = LessonPagination
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
