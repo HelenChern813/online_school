@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from users.models import User
@@ -81,3 +82,24 @@ class Payment(models.Model):
         default=ONLINE_PAYMENT,
         verbose_name="Способ оплаты",
     )
+
+
+class UpdateSubscriptionCourse(models.Model):
+    """Модел на проверку подписки"""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_subscription",
+        verbose_name="Пользователь",
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="course_subscription", verbose_name="Курс"
+    )
+
+    def __str__(self):
+        return f"{self.user.email} подписан на {self.course.name}"
+
+    class Meta:
+        verbose_name = "Подписка на курс"
+        verbose_name_plural = "Подписки на курсы"

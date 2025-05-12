@@ -1,13 +1,16 @@
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, views
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from education.models import Course, Lesson, Payment
+from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
+from education.paginators import CoursePagination, LessonPagination
 from education.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.permissions import IsModer, IsOwner
-from education.paginators import LessonPagination, CoursePagination
 
 
 class CourseViewSet(ModelViewSet):
@@ -72,3 +75,23 @@ class PaymentListView(ListAPIView):
         "date_pay",
     ]
     filterset_fields = ("content_pay", "payment_method")
+
+
+class UpdateSubscriptionCourseAPIView(views.APIView):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        course_id = request.data.get("course")
+
+        course = get_object_or_404(Course, id=course_id)
+
+        subs_item = UpdateSubscriptionCourse.objects.filter(user=user, course=course)
+
+        if subs_item.exists():
+            subs_item.delete()
+            message = "Подписка удалена"
+        else:
+            UpdateSubscriptionCourse.objects.create(user=user, course=course)
+            message = "Подписка добавлена"
+
+        return Response({"message": message}, status=status.HTTP_200_OK)

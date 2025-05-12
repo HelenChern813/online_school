@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.serializers import CharField, ModelSerializer
 
-from education.models import Course, Lesson, Payment
+from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
 from education.validators import validate_valid_link
 
 
@@ -25,7 +25,7 @@ class CourseSerializer(ModelSerializer):
 
 class LessonSerializer(ModelSerializer):
     video = CharField(validators=[validate_valid_link])
-    
+
     class Meta:
         model = Lesson
         fields = "__all__"
@@ -35,3 +35,10 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
+
+
+class UpdateSubscriptionCourseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UpdateSubscriptionCourse
+        fields = ["user", "course"]
