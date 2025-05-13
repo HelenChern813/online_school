@@ -74,7 +74,7 @@ class Payment(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Пользователь")
     date_pay = models.DateTimeField(verbose_name="Дата и время оплаты")
-    content_pay = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Оплаченный курс')
     payment_amount = models.IntegerField(verbose_name="Сумма оплаты")
     payment_method = models.CharField(
         max_length=15,
@@ -82,6 +82,16 @@ class Payment(models.Model):
         default=ONLINE_PAYMENT,
         verbose_name="Способ оплаты",
     )
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Оплаченый урок')
+    session_id = models.CharField(max_length=300, blank=True, null=True, verbose_name='Сессия')
+    link_pay = models.URLField(max_length=500, blank=True, null=True, verbose_name='Ссылка на платеж')
+
+    def __str__(self):
+        return f"Платеж {self.session_id} на сумму {self.payment_amount} от {self.user}"
+
+    class Meta:
+        verbose_name = 'Платеж'
+        verbose_name_plural = 'Платежи'
 
 
 class UpdateSubscriptionCourse(models.Model):
@@ -94,7 +104,7 @@ class UpdateSubscriptionCourse(models.Model):
         verbose_name="Пользователь",
     )
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="course_subscription", verbose_name="Курс"
+        Course, on_delete=models.CASCADE, related_name="course_subscriptions", verbose_name="Курс"
     )
 
     def __str__(self):
