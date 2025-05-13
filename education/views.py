@@ -79,11 +79,10 @@ class PaymentListView(ListAPIView):
 
 class UpdateSubscriptionCourseAPIView(views.APIView):
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        course_id = request.data.get("course")
+    def post(self, request, course_id):
 
         course = get_object_or_404(Course, id=course_id)
+        user = request.user
 
         subs_item = UpdateSubscriptionCourse.objects.filter(user=user, course=course)
 

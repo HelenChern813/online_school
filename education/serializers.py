@@ -35,10 +35,3 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
-
-
-class UpdateSubscriptionCourseSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UpdateSubscriptionCourse
-        fields = ["user", "course"]
