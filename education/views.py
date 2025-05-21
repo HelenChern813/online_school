@@ -5,11 +5,13 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ModelViewSet
 
 from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
 from education.paginators import CoursePagination, LessonPagination
 from education.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
+from education.services import create_stripe_price, create_stripe_product, create_stripe_session
 from users.permissions import IsModer, IsOwner
 
 
@@ -94,3 +96,28 @@ class UpdateSubscriptionCourseAPIView(views.APIView):
             message = "Подписка добавлена"
 
         return Response({"message": message}, status=status.HTTP_200_OK)
+
+
+class PaymentViewSet(ModelViewSet):
+
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ["course", "lesson", "payment_method"]
+    ordering_fields = [
+        "date_pay",
+    ]
+
+    def perform_create(self, serializer):
+        course = serializer.validated_data.get("course")
+        lesson = serializer.validated_data.get("lesson")
+        product = course or lesson
+
+        try:
+            stripe_product = create_stripe_product(product.name)
+            stripe_product_price = create_stripe_price(stripe_product, product.price)
+            session_id, payment_link = create_stripe_session(stripe_product_price)
+        except Exception:
+            raise ValidationError("Ошибка при создании платежа в Stripe.")
+
+        serializer.save(session_id=session_id, link=payment_link)

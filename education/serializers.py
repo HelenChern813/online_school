@@ -32,6 +32,22 @@ class LessonSerializer(ModelSerializer):
 
 
 class PaymentSerializer(ModelSerializer):
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Payment
         fields = "__all__"
+        read_only_fields = ("date_pay", "payment_amount", "payment_method", "session_id", "link_pay")
+
+    def validate(self, data):
+
+        course = data.get("course")
+        lesson = data.get("lesson")
+
+        if course and lesson:
+            raise serializers.ValidationError("Нужно указать урок или курс.")
+        if not course and not lesson:
+            raise serializers.ValidationError("Необходимо обязательно указать урок или курс.")
+
+        return data
