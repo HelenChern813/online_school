@@ -5,6 +5,7 @@ from users.models import User
 
 
 class UserSerializer(ModelSerializer):
+    """Сериализатор модели пользователя"""
 
     payments = PaymentSerializer(many=True, read_only=True)
 

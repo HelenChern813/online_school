@@ -17,6 +17,8 @@ from users.permissions import IsModer, IsOwner
 
 
 class CourseViewSet(ModelViewSet):
+    """Представление модели курса"""
+
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CoursePagination

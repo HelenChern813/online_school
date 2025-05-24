@@ -6,6 +6,8 @@ from education.validators import validate_valid_link
 
 
 class CourseSerializer(ModelSerializer):
+    """Сериализатор модели курса"""
+
     lesson_count = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
 
@@ -24,6 +26,8 @@ class CourseSerializer(ModelSerializer):
 
 
 class LessonSerializer(ModelSerializer):
+    """Сериализатор модели урока"""
+
     video = CharField(validators=[validate_valid_link])
 
     class Meta:
@@ -32,6 +36,7 @@ class LessonSerializer(ModelSerializer):
 
 
 class PaymentSerializer(ModelSerializer):
+    """Сериализатор модели платежа с реализацией валидации"""
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
