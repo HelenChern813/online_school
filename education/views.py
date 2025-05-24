@@ -12,8 +12,8 @@ from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
 from education.paginators import CoursePagination, LessonPagination
 from education.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from education.services import create_stripe_price, create_stripe_product, create_stripe_session
-from users.permissions import IsModer, IsOwner
 from education.tasks import sending_messages_to_users
+from users.permissions import IsModer, IsOwner
 
 
 class CourseViewSet(ModelViewSet):

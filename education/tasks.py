@@ -13,7 +13,7 @@ def sending_messages_to_users(course_id):
     subscriptions = course.course_subscription.all()
     recipient_emails = [subscription.user.email for subscription in subscriptions]
 
-    subject = f'Обновление курса: {course.name}'
+    subject = f"Обновление курса: {course.name}"
     message = f'Курс "{course.name}" был обновлен. Проверьте новые материалы!'
     from_email = DEFAULT_FROM_EMAIL
 

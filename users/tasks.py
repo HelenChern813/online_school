@@ -8,7 +8,7 @@ from users.models import User
 
 @shared_task
 def user_blocking():
-    """ Блокирует пользователя, который не заходил больше месяца """
+    """Блокирует пользователя, который не заходил больше месяца"""
 
     users = User.objects.filter(last_login__lt=now() - timedelta(days=30))
     if users.count() > 0:
