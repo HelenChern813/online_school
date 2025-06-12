@@ -12,10 +12,13 @@ from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
 from education.paginators import CoursePagination, LessonPagination
 from education.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from education.services import create_stripe_price, create_stripe_product, create_stripe_session
+from education.tasks import sending_messages_to_users
 from users.permissions import IsModer, IsOwner
 
 
 class CourseViewSet(ModelViewSet):
+    """Представление модели курса"""
+
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CoursePagination
@@ -33,6 +36,16 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModer, IsOwner)
         return super().get_permissions()
+
+    def send_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        sending_messages_to_users.delay(instance.id)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LessonCreateAPIView(CreateAPIView):

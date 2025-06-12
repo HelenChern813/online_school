@@ -7,6 +7,7 @@ from users.models import User
 
 
 class LessonTestCase(APITestCase):
+    """Класс теста модели урока и его функционала"""
 
     def setUp(self) -> None:
         self.user = User.objects.create(email="test@test.com")
@@ -130,6 +131,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     class UpdateSubscriptionCourseTestCase(APITestCase):
+        """Класс тестирования обновления подписки и его функционал"""
 
         def setUp(self):
             self.user = User.objects.create(
