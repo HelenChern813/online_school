@@ -5,7 +5,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Копируем файл с зависимостями и устанавливаем их
-COPY pyproject.toml ./
+COPY poetry.lock pyproject.toml ./
 RUN pip install poetry
 RUN poetry config virtualenvs.create false \
 && poetry install --no-interaction --no-root
