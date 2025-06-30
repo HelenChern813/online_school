@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import CharField, ModelSerializer
 
-from education.models import Course, Lesson, Payment, UpdateSubscriptionCourse
+from education.models import Course, Lesson, Payment
 from education.validators import validate_valid_link
 
 
