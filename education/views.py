@@ -79,7 +79,7 @@ class LessonUpdateAPIView(UpdateAPIView):
 
 class LessonDestroyAPIView(DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, ~IsModer, IsOwner]
+    permission_classes = [~IsModer | IsOwner, IsAuthenticated]
 
 
 class PaymentListView(ListAPIView):
