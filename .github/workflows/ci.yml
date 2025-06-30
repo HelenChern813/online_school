@@ -41,6 +41,18 @@ jobs:
           poetry install --no-root
 
       - name: Run tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_NAME }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          STRIPE_API_KEY: ${{ secrets.API_KEY_PK }}
         run: poetry run python manage.py test
 
   build:
