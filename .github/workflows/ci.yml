@@ -99,9 +99,9 @@ jobs:
 
       - name: Deploy to Server
         run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}  "mkdir -p  /online_school" || false
           ssh -T -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /home/${{ secrets.SSH_USER }}/online_school 
-          # Используйте домашнюю директорию пользователя
+            cd /online_school 
 
             echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
