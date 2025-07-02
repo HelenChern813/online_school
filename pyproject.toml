@@ -21,12 +21,15 @@ redis = "^6.1.0"
 celery = "^5.5.2"
 eventlet = "^0.40.0"
 django-celery-beat = "^2.8.1"
-flake8 = "^7.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 isort = "^6.0.1"
+
+
+[tool.poetry.group.lint.dependencies]
+flake8 = "^7.3.0"
 
 [build-system]
 requires = ["poetry-core"]

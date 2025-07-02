@@ -55,7 +55,7 @@ class LessonTestCase(APITestCase):
     def test_list_lesson(self):
         """Тестирование вывода списка уроков"""
 
-        url = reverse('education:lesson_list')
+        url = reverse("education:lesson_list")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -83,7 +83,7 @@ class LessonTestCase(APITestCase):
     def test_retrieve_lesson(self):
         """Тестирование выводы конкретного урока"""
 
-        url = reverse('education:lesson_retrieve', args=(self.lesson.pk,))
+        url = reverse("education:lesson_retrieve", args=(self.lesson.pk,))
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -105,7 +105,7 @@ class LessonTestCase(APITestCase):
         """Тестирование обновления урока"""
 
         data = {"name": "Геометрия"}
-        url = reverse('education:lesson_update', args=(self.lesson.pk,))
+        url = reverse("education:lesson_update", args=(self.lesson.pk,))
         response = self.client.patch(url, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -114,7 +114,7 @@ class LessonTestCase(APITestCase):
     def test_delete_lesson(self):
         """Тестирование удаления урока"""
 
-        url = reverse('education:lesson_delete', args=(self.lesson.pk,))
+        url = reverse("education:lesson_delete", args=(self.lesson.pk,))
 
         response = self.client.delete(url)
 
