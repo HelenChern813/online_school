@@ -2,7 +2,7 @@ services:
 
   static_collector:
     image: ${IMAGE}:${TAG}
-    command: python manage.py collectstatc -c --no-input
+    command: python manage.py collectstatic -c --no-input
     env_file:
       - .env
     volumes:
@@ -60,7 +60,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_NAME}
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
       interval: 5s
       timeout: 5s
       retries: 5
