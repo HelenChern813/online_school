@@ -81,7 +81,9 @@ jobs:
       - name: Pull images
         run: sudo docker compose pull
       - name: Up application
-        run: sudo docker compose up -d --wait
+        run: |
+          sudo docker compose down
+          sudo docker compose up -d --wait
       - name: Cleanup
         if: always()
         run: docker system prune -a -f
