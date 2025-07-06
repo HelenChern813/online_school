@@ -69,21 +69,35 @@ jobs:
           echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
           echo "STRIPE_API_KEY=${{ secrets.API_KEY_PK }}" >> .env
+          echo "REDIS_HOST=redis" >> .env
           echo "IMAGE=${{ secrets.DOCKER_HUB_USERNAME }}/myapp" >> .env
           echo "TAG=${{ github.sha }}" >> .env
-          echo "REDIS_HOST=redis" >> .env
       - name: Copy files to server
         run: |
           scp -o StrictHostKeyChecking=no nginx/nginx.conf ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/online_school/nginx.conf
           scp -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/online_school/docker-compose.yml
           scp -o StrictHostKeyChecking=no .env ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/online_school/.env
-
       - name: Pull images
-        run: sudo docker compose pull
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: sudo docker compose pull
+
       - name: Up application
-        run: |
-          sudo docker compose down
-          sudo docker compose up -d --wait
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: sudo docker compose up -d --wait
+
       - name: Cleanup
         if: always()
-        run: docker system prune -a -f
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: docker system prune -a -f
