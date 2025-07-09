@@ -72,7 +72,6 @@ jobs:
           echo "REDIS_HOST=redis" >> .env
           echo "IMAGE=${{ secrets.DOCKER_HUB_USERNAME }}/myapp" >> .env
           echo "TAG=${{ github.sha }}" >> .env
-
       - name: Copy files to server
         run: |
           scp -o StrictHostKeyChecking=no nginx/nginx.conf ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/online_school/nginx.conf
