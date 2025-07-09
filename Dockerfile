@@ -13,6 +13,8 @@ RUN poetry config virtualenvs.create false \
 # Копируем остальные файлы проекта в контейнер
 COPY . .
 
+RUN mkdir -p /online_school/static
+
 # Открываем порт 8000 для взаимодействия с приложением
 EXPOSE 8000
 
