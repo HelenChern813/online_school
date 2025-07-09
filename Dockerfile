@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 # Устанавливаем рабочую директорию в контейнере
-WORKDIR /app
+WORKDIR /online_school
 
 # Копируем файл с зависимостями и устанавливаем их
 COPY poetry.lock pyproject.toml ./
