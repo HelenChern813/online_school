@@ -7,11 +7,22 @@ services:
       - .env
     volumes:
       - .:/app
-      - static_volume:/app/static
+      - static_volume:/online_school/static
     ports:
       - "8000:8000"
     depends_on:
       - db
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/online_school/staticfiles
+    depends_on:
+      - web
 
   celery:
     build:
@@ -39,6 +50,7 @@ services:
     depends_on:
       - redis
       - celery
+
   db:
     image: postgres:16.0
     volumes:
